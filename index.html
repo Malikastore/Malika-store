@@ -1,995 +1,967 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Malika Natural Cosmetics - Responsive Mobile Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brandGreen: '#4D6B40',
-                        brandBg: '#F7F9F5',
-                        brandDarkGreen: '#324629',
-                        brandGold: '#D4AF37',
-                        brandLightGreen: '#EAEFE6',
-                        accentPeach: '#F2ECE4'
-                    },
-                    animation: {
-                        'fadeIn': 'fadeIn 0.3s ease-out forwards',
-                        'slideUp': 'slideUp 0.4s ease-out forwards'
-                    },
-                    keyframes: {
-                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            background-color: #1a2e15;
-        }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .store-page { display: none; }
-        .store-page.active { display: block; animation: fadeIn 0.3s ease-out; }
-        .nav-clip { box-shadow: 0 -4px 10px rgba(0,0,0,0.03); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hawk Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      /* light-blue / white 2026 palette (variable names kept for compatibility, values remapped) */
+      --ink: #EEF6FE;          /* page background — icy blue-white */
+      --panel: #FFFFFF;        /* card / surface */
+      --panel-2: #E4F1FC;      /* secondary surface / image wells */
+      --panel-3: #D3E8FA;      /* tertiary surface */
+      --gold: #1E88E5;         /* primary accent — sky blue (was gold) */
+      --gold-dim: #9FCDF2;     /* soft accent border */
+      --rust: #E1555C;         /* alerts / sold-out / remove */
+      --mist: #0B2E52;         /* primary ink/text — deep navy on light surfaces */
+      --steel: #6584A6;        /* muted secondary text */
+      --line: #D6E8F8;         /* hairline borders */
+      --deep: #0A3D73;         /* extra-deep blue for CTAs / gradients */
+      --cyan: #17C3D6;         /* best-seller / highlight accent */
+      --cut: 16px;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(1100px 460px at 100% -10%, rgba(30,136,229,0.10), transparent 60%),
+        radial-gradient(900px 420px at -10% 20%, rgba(23,195,214,0.08), transparent 55%),
+        var(--ink);
+      color: var(--mist);
+      margin: 0;
+      padding-bottom: 108px;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .display {
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+
+    /* ===== 2026 signature shape: soft "talon" corner — rounded, one clipped tip, glass edge ===== */
+    .cut {
+      border-radius: 22px 22px 22px 6px;
+      box-shadow: 0 1px 2px rgba(11,46,82,0.04), 0 10px 24px -14px rgba(20,100,180,0.28);
+    }
+    .cut-sm {
+      border-radius: 14px 14px 14px 5px;
+    }
+
+    /* signature wing-swoop divider, used to punctuate section headers */
+    .swoop {
+      width: 30px; height: 14px; flex-shrink: 0;
+      background: linear-gradient(100deg, var(--gold), var(--cyan));
+      clip-path: polygon(0 100%, 55% 100%, 100% 0, 78% 0);
+    }
+
+    header {
+      position: sticky; top: 0; background: rgba(238,246,254,0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      padding: 16px 15px; display: flex; justify-content: space-between; align-items: center;
+      z-index: 1000; border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .logo-img { height: 34px; border-radius: 10px 10px 10px 3px; }
+    .brand-name { font-family:'Space Grotesk', sans-serif; font-weight:700; letter-spacing:.06em; font-size:15px; color:var(--deep); }
+    header .socials a {
+      color: var(--deep); margin-left: 10px; font-size: 13px; transition: all .2s;
+      width: 32px; height: 32px; display:inline-flex; align-items:center; justify-content:center;
+      background: var(--panel-2); border-radius: 10px;
+    }
+    header .socials a:hover { background: var(--gold); color: #fff; }
+
+    .search-area { padding: 14px 15px 6px; }
+    .search-input {
+      width: 100%; padding: 13px 18px 13px 42px; border: 1px solid var(--line); border-radius: 16px;
+      background: var(--panel) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="%236584A6" stroke-width="2"><circle cx="6.5" cy="6.5" r="5.5"/><line x1="14" y1="14" x2="10.5" y2="10.5"/></svg>') no-repeat 16px center;
+      color: var(--mist); font-family:'Inter'; font-size: 14px; outline: none;
+      box-shadow: 0 1px 2px rgba(11,46,82,0.04); transition: box-shadow .2s, border-color .2s;
+    }
+    .search-input::placeholder { color: var(--steel); }
+    .search-input:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(30,136,229,0.14); }
+
+    /* ===== Hero banner — 2026 glass panel, gradient mesh overlay, floating stat chips ===== */
+    .promo-banner {
+      width: 100%; height: 320px; overflow: hidden; position: relative;
+      cursor: pointer; margin: 14px 15px 28px; width: calc(100% - 30px);
+      border-radius: 28px 28px 28px 8px;
+      box-shadow: 0 20px 40px -20px rgba(11,61,115,0.35);
+    }
+    .banner-track { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; }
+    .banner-img { min-width: 100%; height: 100%; object-fit: cover; filter: saturate(1.02) brightness(0.72); }
+    .banner-stripes {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        linear-gradient(185deg, rgba(9,45,86,0.08) 0%, rgba(8,38,74,0.55) 68%, rgba(6,28,58,0.82) 100%),
+        linear-gradient(100deg, rgba(30,136,229,0.28), transparent 45%);
+    }
+    .banner-badge {
+      position: absolute; top: 18px; left: 18px; display:flex; align-items:center; gap:8px;
+      background: rgba(255,255,255,0.16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 100px; padding: 7px 14px 7px 10px;
+    }
+    .banner-badge .dot-live { width:7px; height:7px; border-radius:50%; background: var(--cyan); box-shadow: 0 0 0 3px rgba(23,195,214,0.35); }
+    .banner-badge span { color:#fff; font-family:'Space Grotesk'; font-size: 11px; font-weight:600; letter-spacing:.1em; }
+    .banner-copy {
+      position: absolute; left: 22px; bottom: 20px; right: 22px; pointer-events: none;
+    }
+    .banner-copy .eyebrow {
+      display:inline-block; background: linear-gradient(100deg, var(--gold), var(--cyan)); color: #fff; font-family:'Space Grotesk';
+      font-weight:700; font-size: 10px; letter-spacing:.14em; padding: 5px 12px; border-radius: 100px; margin-bottom: 10px;
+    }
+    .banner-copy h1 { color: #fff; font-size: 27px; line-height:1.12; letter-spacing: 0; text-shadow: 0 4px 18px rgba(0,0,0,.35); }
+    .banner-copy p.sub { color: rgba(255,255,255,0.78); font-size: 13px; font-family:'Inter'; margin-top: 8px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+    .banner-dots { position:absolute; bottom: 20px; right: 22px; display:flex; gap:5px; }
+    .banner-dots span { width: 16px; height: 4px; border-radius: 4px; background: rgba(255,255,255,.32); transition: all .3s; }
+    .banner-dots span.on { background: var(--cyan); width: 24px; }
+
+    .view-section { display: none; padding: 15px; animation: fadeIn 0.25s; }
+    #home.view-section { padding: 0; }
+    .view-section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .section-head { display:flex; align-items:center; gap:10px; margin: 4px 0 16px; }
+    .section-head h2 { font-size: 19px; color: var(--deep); font-weight: 700; }
+    .section-head .rule { flex:1; height:1px; background: linear-gradient(90deg, var(--line), transparent); }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 0 15px; }
+
+    .card {
+      background: var(--panel); border: 1px solid var(--line); padding: 12px; position: relative; text-align: left;
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .card:active { transform: scale(0.98); }
+    .card .img-box {
+      width: 100%; height: 140px; border-radius: 16px 16px 16px 5px;
+      background: linear-gradient(160deg, var(--panel-2), #F8FBFF); display: flex;
+      align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px;
+    }
+    .card .img-box img { width: 100%; height: 100%; object-fit: contain; }
+    .card .p-name { font-family:'Inter'; font-weight:600; font-size: 13px; color: var(--mist); line-height:1.25; }
+    .card .p-price {
+      font-family:'Space Grotesk'; color: var(--deep); font-weight:700; font-size: 13px; margin-top: 6px;
+      letter-spacing:.01em; display:inline-flex; align-items:center; gap:5px;
+    }
+    .card .p-price::before { content:''; width:6px; height:6px; border-radius:50%; background: var(--gold); display:inline-block; }
+
+    .fav-btn {
+      position: absolute; top: 10px; right: 10px; font-size: 14px; cursor: pointer; z-index: 20;
+      width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(6px); display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 4px 10px -4px rgba(11,46,82,0.25);
+    }
+
+    .best-badge {
+      position: absolute; top: 10px; left: 10px; background: linear-gradient(100deg, var(--gold), var(--cyan)); color: #fff;
+      padding: 4px 10px 4px 8px; font-size: 9px; font-family:'Space Grotesk'; font-weight:700; letter-spacing:.06em;
+      z-index: 10; text-transform: uppercase; border-radius: 100px; display:flex; align-items:center; gap:4px;
+    }
+    .best-badge i { font-size: 9px; }
+
+    .out-badge {
+      position: absolute; top: 10px; left: 10px; background: var(--rust); color: #fff;
+      padding: 4px 10px; font-size: 9px; font-family:'Space Grotesk'; font-weight:700; letter-spacing:.06em;
+      z-index: 10; text-transform: uppercase; border-radius: 100px;
+    }
+
+    /* ===== Best sellers — horizontal glass strip ===== */
+    .bestseller-scroll {
+      display: flex; gap: 14px; overflow-x: auto; padding: 2px 15px 10px; scroll-snap-type: x mandatory;
+      -ms-overflow-style: none; scrollbar-width: none;
+    }
+    .bestseller-scroll::-webkit-scrollbar { display: none; }
+    .bs-card {
+      scroll-snap-align: start; flex: 0 0 154px; background: var(--panel); border: 1px solid var(--line);
+      padding: 10px; position: relative; border-radius: 20px 20px 20px 6px;
+      box-shadow: 0 12px 24px -16px rgba(11,61,115,0.25);
+    }
+    .bs-card .img-box { width: 100%; height: 118px; border-radius: 14px 14px 14px 5px; background: linear-gradient(160deg, var(--panel-2), #F8FBFF); display:flex; align-items:center; justify-content:center; overflow:hidden; margin-bottom: 8px; }
+    .bs-card .img-box img { width: 100%; height: 100%; object-fit: contain; }
+    .bs-card .p-name { font-family:'Inter'; font-weight:600; font-size: 12px; color: var(--mist); line-height:1.25; }
+    .bs-card .p-price { font-family:'Space Grotesk'; color: var(--deep); font-weight:700; font-size: 12px; margin-top: 5px; }
+    .bs-rank {
+      position:absolute; top:8px; left:8px; width:22px; height:22px; border-radius:50%;
+      background: var(--ink); border: 1px solid var(--line); color: var(--deep); font-family:'Space Grotesk';
+      font-weight:700; font-size: 10px; display:flex; align-items:center; justify-content:center;
+    }
+
+    #details.view-section { padding: 15px; }
+    .back-btn {
+      background: var(--panel); border: 1px solid var(--line); color: var(--deep); font-family:'Inter'; font-weight: 600; font-size: 12px;
+      padding: 9px 18px; margin-bottom: 14px; cursor: pointer; letter-spacing:.02em; border-radius: 100px;
+      box-shadow: 0 1px 2px rgba(11,46,82,0.05);
+    }
+    .back-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    .slider-container {
+      position: relative; width: 100%; height: 320px; background: var(--panel); overflow: hidden;
+      border: 1px solid var(--line); border-radius: 24px 24px 24px 8px;
+      box-shadow: 0 16px 32px -20px rgba(11,61,115,0.3);
+    }
+    .slider-track { display: flex; transition: transform 0.4s ease; height: 100%; }
+    .slide { flex: 0 0 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, var(--panel-2), #F8FBFF); }
+    .slide img { width: 100%; height: 100%; object-fit: contain; }
+    .slider-nav { position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; transform: translateY(-50%); padding: 0 12px; z-index: 5; }
+    .arrow {
+      background: rgba(255,255,255,0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.6); border-radius: 50%; font-size: 14px; width: 38px; height: 38px;
+      color: var(--deep); cursor: pointer; box-shadow: 0 6px 16px -6px rgba(11,46,82,0.3);
+    }
+
+    #det-title { font-size: 23px; color: var(--deep); margin: 18px 0 4px; font-weight: 700; }
+    #det-price {
+      font-family:'Space Grotesk'; color: #fff; background: linear-gradient(100deg, var(--gold), var(--deep));
+      display: inline-block; padding: 6px 16px; border-radius: 100px;
+      font-size: 15px; font-weight:700; margin-bottom: 18px; letter-spacing:.01em;
+    }
+
+    .field-label { font-size: 11px; color: var(--steel); text-transform: uppercase; letter-spacing:.08em; font-family:'Space Grotesk'; font-weight: 600; }
+
+    .color-dot { width: 30px; height: 30px; cursor: pointer; border: 2px solid var(--line); border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 2px 6px rgba(11,46,82,0.08); transition: transform .15s; }
+    .color-dot.selected { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(30,136,229,0.18); transform: scale(1.06); }
+    .size-chip {
+      border: 1px solid var(--line); padding: 9px 18px; cursor: pointer; display: inline-block; border-radius: 100px;
+      margin-right: 8px; font-family:'Space Grotesk'; font-size: 13px; color: var(--steel); letter-spacing:.02em;
+      background: var(--panel); transition: all .15s;
+    }
+    .size-chip.selected { background: linear-gradient(100deg, var(--gold), var(--deep)); color: #fff; border-color: transparent; font-weight:600; }
+
+    .product-qty-box {
+      display: flex; align-items: center; justify-content: center;
+      gap: 22px; margin: 22px 0; background: var(--panel); border: 1px solid var(--line);
+      padding: 10px 16px; width: fit-content; border-radius: 100px;
+      box-shadow: 0 1px 2px rgba(11,46,82,0.05);
+    }
+    .qty-btn-circle {
+      width: 32px; height: 32px; border: none; border-radius: 50%;
+      background: var(--panel-2); color: var(--deep); font-size: 18px; font-weight: bold; cursor: pointer;
+    }
+
+    .list-item {
+      background: var(--panel); border: 1px solid var(--line); padding: 12px; margin-bottom: 10px;
+      display: flex; gap: 12px; align-items: center; border-radius: 18px 18px 18px 6px;
+      box-shadow: 0 8px 18px -14px rgba(11,61,115,0.3);
+    }
+    .list-img { width: 55px; height: 55px; border-radius: 12px 12px 12px 4px; background: linear-gradient(160deg, var(--panel-2), #F8FBFF); overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink:0; }
+
+    nav {
+      position: fixed; bottom: 14px; left: 14px; right: 14px; width: auto; height: 68px;
+      background: rgba(255,255,255,0.78); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      display: flex; justify-content: space-around; align-items: center;
+      border: 1px solid rgba(255,255,255,0.7); border-radius: 26px; z-index: 1500;
+      box-shadow: 0 16px 40px -14px rgba(11,61,115,0.35);
+    }
+    .nav-btn { color: var(--steel); text-align: center; font-size: 9px; cursor: pointer; flex: 1; display: flex; flex-direction: column; align-items: center; letter-spacing:.03em; text-transform: uppercase; font-family:'Space Grotesk'; font-weight: 600; }
+    .nav-btn.active { color: var(--gold); }
+    .nav-btn span { display: block; font-size: 17px; margin-bottom: 3px; }
+
+    .cart-btn-wrapper { position: relative; flex:1; display:flex; justify-content:center; }
+    .cart-circle {
+      background: linear-gradient(140deg, var(--gold), var(--deep)); width: 54px; height: 54px; color: #fff;
+      display: flex; align-items: center; justify-content: center; border-radius: 50%;
+      margin-top: -28px; border: 4px solid var(--ink); cursor:pointer;
+      box-shadow: 0 10px 22px -6px rgba(30,136,229,0.6);
+    }
+    .cart-circle i { font-size: 18px; }
+    .cart-badge {
+      position: absolute; top: -32px; right: calc(50% - 32px); background: var(--rust); color: #fff;
+      font-size: 10px; font-family:'Space Grotesk'; font-weight:700; min-width: 17px; height: 17px; padding: 0 3px;
+      display: none; align-items: center; justify-content: center; border: 2px solid #fff; border-radius: 50%;
+    }
+
+    .btn-main {
+      border: none; padding: 15px; font-weight: 700; cursor: pointer; width: 100%; border-radius: 100px;
+      font-family:'Space Grotesk'; letter-spacing:.03em; text-transform: uppercase; font-size: 13px; transition: 0.2s;
+    }
+    .btn-ghost { background: var(--panel); color: var(--deep); border: 1px solid var(--line); }
+    .btn-ghost:hover { border-color: var(--gold); background: var(--panel-2); }
+    .btn-gold { background: linear-gradient(100deg, var(--gold), var(--deep)); color: #fff; box-shadow: 0 10px 24px -10px rgba(30,136,229,0.6); }
+    .btn-gold:hover { filter: brightness(1.06); }
+
+    .order-form input, .order-form textarea {
+      width: 100%; background: var(--panel); border: 1px solid var(--line); color: var(--mist); border-radius: 16px;
+      padding: 13px 16px; margin-bottom: 12px; outline: none; font-family:'Inter'; font-size: 14px;
+    }
+    .order-form input::placeholder, .order-form textarea::placeholder { color: var(--steel); }
+    .order-form input:focus, .order-form textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(30,136,229,0.12); }
+
+    .other-products-section { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 22px; }
+
+    .share-btn-float {
+      position: absolute; top: 14px; left: 14px; width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.75); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.6);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--deep); font-size: 15px; z-index: 25; cursor: pointer;
+      box-shadow: 0 6px 16px -6px rgba(11,46,82,0.3);
+    }
+
+    .promo-box {
+      background: var(--panel); border: 1px solid var(--line); padding: 16px; border-radius: 20px 20px 20px 6px;
+      margin-bottom: 12px; display:flex; gap: 14px; align-items:center;
+      box-shadow: 0 10px 22px -16px rgba(11,61,115,0.3);
+    }
+    .promo-box .icon {
+      font-size: 17px; color: #fff; width: 40px; height: 40px; border-radius: 12px 12px 12px 4px; flex-shrink:0;
+      background: linear-gradient(140deg, var(--gold), var(--cyan)); display:flex; align-items:center; justify-content:center;
+    }
+    .promo-box b { font-family:'Space Grotesk'; color: var(--deep); font-size: 14px; letter-spacing:.01em; }
+    .promo-box small { color: var(--steel); font-size: 12px; }
+
+    .about-copy {
+      line-height: 1.75; background: var(--panel); border: 1px solid var(--line); padding: 24px; font-size: 14px; color: var(--mist);
+      border-radius: 22px 22px 22px 6px; box-shadow: 0 10px 24px -18px rgba(11,61,115,0.3);
+    }
+    .about-copy b { color: var(--gold); }
+
+    .share-menu {
+      display: none; position: fixed; bottom: 0; left: 0; width: 100%;
+      background: var(--ink); padding: 22px 20px 26px; border-top: 1px solid var(--line);
+      border-radius: 26px 26px 0 0; z-index: 2000; animation: slideUp 0.3s;
+      box-shadow: 0 -20px 40px -20px rgba(11,61,115,0.3);
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .share-menu h3 { color: var(--deep); font-size: 16px; margin-bottom: 14px; }
+    .share-option {
+      display: flex; align-items: center; gap: 15px; padding: 14px 16px; border-radius: 16px;
+      background: var(--panel); border: 1px solid var(--line); margin-bottom: 10px; cursor: pointer; color: var(--mist); font-size: 14px;
+    }
+
+    .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(9,45,86,0.45); backdrop-filter: blur(2px); z-index: 1900; }
+
+    .empty-state { text-align:center; padding: 40px 20px; color: var(--steel); font-size: 14px; }
+    .empty-state .glyph { font-size: 28px; margin-bottom: 10px; display:block; }
+  </style>
 </head>
-<body class="text-gray-800 antialiased">
+<body onclick="closeShare()">
 
-    <div class="max-w-md mx-auto bg-brandBg min-h-screen shadow-2xl relative flex flex-col justify-between border-x border-brandDarkGreen/20 overflow-x-hidden pb-20">
-        
-        <header class="bg-brandBg/95 backdrop-blur px-4 py-3.5 flex justify-between items-center sticky top-0 z-50 border-b border-gray-100">
-            <div class="flex items-center space-x-2" onclick="navigateTo('home-page')">
-                <span class="text-2xl font-extrabold text-brandGreen tracking-tight cursor-pointer font-serif">Malika</span>
-                <span class="text-[10px] bg-brandGreen/10 text-brandGreen px-2 py-0.5 rounded-full font-bold">100% Natural</span>
-            </div>
-            <div class="flex items-center space-x-4 text-gray-700">
-                <button onclick="navigateTo('search-page')" class="hover:text-brandGreen p-1 transition"><i class="fas fa-search text-lg"></i></button>
-                <button onclick="navigateTo('favorites-page')" class="hover:text-brandGreen p-1 transition relative">
-                    <i class="far fa-heart text-lg"></i>
-                    <span id="fav-badge" class="absolute -top-1 -right-1.5 bg-red-500 text-white text-[8px] rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold hidden">0</span>
-                </button>
-                <button onclick="navigateTo('cart-page')" class="hover:text-brandGreen p-1 transition relative">
-                    <i class="fas fa-shopping-basket text-lg"></i>
-                    <span id="cart-badge" class="absolute -top-1 -right-1.5 bg-brandGreen text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold">0</span>
-                </button>
-            </div>
-        </header>
+<header>
+  <div class="brand">
+    <img src="WhatsApp Image 2026-03-31 at 10.52.28 PM.jpeg" class="logo-img" onerror="this.style.display='none'">
+    <span class="brand-name">HAWK STORE</span>
+  </div>
+  <div class="socials">
+    <a href="https://www.facebook.com/share/1BHngEJiKi/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/hawk_k11?igsh=dnY1YTlrOHk3dHQ5" target="_blank"><i class="fab fa-instagram"></i></a>
+  </div>
+</header>
 
-        <main class="flex-grow">
-            
-            <div id="home-page" class="store-page active">
-                <section class="px-4 pt-4 pb-6 bg-gradient-to-b from-brandLightGreen/50 to-transparent rounded-b-[32px]">
-                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col space-y-4">
-                        <div class="text-left space-y-2">
-                            <h1 class="text-2xl font-black text-brandDarkGreen leading-tight">
-                                Make Your Skin Radiate <br>With <span class="text-brandGreen underline decoration-wavy decoration-brandGold/40">GET-GLOW</span>
-                            </h1>
-                            <p class="text-gray-500 text-xs leading-relaxed">
-                                We care about your skin and its unique radiance. Your natural glow is our primary responsibility, crafted with ingredients extracted from clean nature.
-                            </p>
-                        </div>
-                        
-                        <div class="relative rounded-xl overflow-hidden bg-brandLightGreen h-48 flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600" alt="Malika Natural Beauty" class="w-full h-full object-cover">
-                            <div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur text-[10px] text-brandDarkGreen font-bold px-2 py-1 rounded-lg shadow-sm">
-                                ⭐ Beauty Experts' #1 Choice
-                            </div>
-                        </div>
+<div id="home" class="view-section active">
+  <div class="search-area">
+    <input type="text" class="search-input" placeholder="Search Hawk products…" oninput="searchApp(this.value)">
+  </div>
 
-                        <button onclick="scrollToCategories()" class="bg-brandGreen text-white py-3 rounded-xl hover:bg-brandDarkGreen transition-all text-xs font-bold w-full shadow-md shadow-brandGreen/20 flex items-center justify-center space-x-2">
-                            <span>Shop Now</span>
-                            <i class="fas fa-arrow-right text-[10px]"></i>
-                        </button>
-                    </div>
-                </section>
+  <div class="promo-banner" onclick="nextBanner()">
+    <div class="banner-track" id="banner-track">
+      <img src="WhatsApp Image 2026-03-31 at 10.52.28 PM.jpeg" class="banner-img" onerror="this.style.opacity=0">
+      <img src="WhatsApp Image 2026-03-30 at 12.26.11 AM.jpeg" class="banner-img" onerror="this.style.opacity=0">
+    </div>
+    <div class="banner-stripes"></div>
+    <div class="banner-badge"><span class="dot-live"></span><span>2026 COLLECTION</span></div>
+    <div class="banner-copy">
+      <span class="eyebrow">No limits</span>
+      <h1>Precision. Speed. Power.</h1>
+      <p class="sub">Elite fabrics built for the modern athlete — wear the power.</p>
+    </div>
+    <div class="banner-dots" id="banner-dots"><span class="on"></span><span></span></div>
+  </div>
 
-                <section class="px-4 py-2 grid grid-cols-3 gap-2 text-center">
-                    <div class="bg-white p-2.5 rounded-xl border border-gray-50 shadow-sm flex flex-col items-center space-y-1">
-                        <div class="w-7 h-7 rounded-full bg-brandLightGreen flex items-center justify-center text-brandGreen"><i class="fas fa-money-bill-wave text-xs"></i></div>
-                        <span class="text-[10px] font-bold text-gray-900">CASH ONLY</span>
-                    </div>
-                    <div class="bg-white p-2.5 rounded-xl border border-gray-50 shadow-sm flex flex-col items-center space-y-1">
-                        <div class="w-7 h-7 rounded-full bg-brandLightGreen flex items-center justify-center text-brandGreen"><i class="fas fa-headset text-xs"></i></div>
-                        <span class="text-[10px] font-bold text-gray-900">Fast Support</span>
-                    </div>
-                    <div class="bg-white p-2.5 rounded-xl border border-gray-50 shadow-sm flex flex-col items-center space-y-1">
-                        <div class="w-7 h-7 rounded-full bg-brandLightGreen flex items-center justify-center text-brandGreen"><i class="fas fa-truck text-xs"></i></div>
-                        <span class="text-[10px] font-bold text-gray-900">Fast Shipping</span>
-                    </div>
-                </section>
+  <div id="bestsellers-section">
+    <div class="section-head" style="padding:0 15px;"><div class="swoop"></div><h2>Best Sellers</h2><div class="rule"></div></div>
+    <div class="bestseller-scroll" id="bestseller-scroll"></div>
+  </div>
 
-                <section id="categories-section" class="px-4 py-6 scroll-mt-20">
-                    <div class="flex justify-between items-center mb-3">
-                        <div class="space-y-0.5">
-                            <h2 class="text-base font-black text-brandDarkGreen">Shop by Category</h2>
-                        </div>
-                        <button onclick="navigateToCategoryPage('all')" class="text-brandGreen font-bold text-xs hover:underline">View All <i class="fas fa-chevron-right text-[9px] ml-0.5"></i></button>
-                    </div>
-                    
-                    <div class="grid grid-cols-3 gap-2.5">
-                        <div onclick="navigateToCategoryPage('skincare')" class="bg-white rounded-xl p-2 shadow-sm border border-gray-50 text-center cursor-pointer hover:border-brandGreen/30 transition-all">
-                            <div class="bg-accentPeach rounded-lg p-2 mb-1.5 h-16 flex items-center justify-center">
-                                <img src="S.jfif" class="max-h-full object-contain mix-blend-multiply">
-                            </div>
-                            <h3 class="font-bold text-xs text-brandDarkGreen">Skin Care</h3>
-                        </div>
-                        <div onclick="navigateToCategoryPage('haircare')" class="bg-white rounded-xl p-2 shadow-sm border border-gray-50 text-center cursor-pointer hover:border-brandGreen/30 transition-all">
-                            <div class="bg-[#E2ECE9] rounded-lg p-2 mb-1.5 h-16 flex items-center justify-center">
-                                <img src="https://images.unsplash.com/photo-1526947425960-945c6e72858f?auto=format&fit=crop&q=80&w=150" class="max-h-full object-contain mix-blend-multiply">
-                            </div>
-                            <h3 class="font-bold text-xs text-brandDarkGreen">Hair Care</h3>
-                        </div>
-                        <div onclick="navigateToCategoryPage('bodycare')" class="bg-white rounded-xl p-2 shadow-sm border border-gray-50 text-center cursor-pointer hover:border-brandGreen/30 transition-all">
-                            <div class="bg-[#ECEBE4] rounded-lg p-2 mb-1.5 h-16 flex items-center justify-center">
-                                <img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=150" class="max-h-full object-contain mix-blend-multiply">
-                            </div>
-                            <h3 class="font-bold text-xs text-brandDarkGreen">Body Care</h3>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="px-4 py-2">
-                    <div class="bg-brandGreen text-white rounded-2xl p-4 relative overflow-hidden flex items-center justify-between shadow-md">
-                        <div class="space-y-1.5 max-w-[60%] z-10">
-                            <span class="bg-brandGold text-brandDarkGreen font-bold text-[9px] px-2 py-0.5 rounded-full uppercase">Limited Offer</span>
-                            <h3 class="text-base font-black leading-tight">30% OFF on Selected Items</h3>
-                            <button onclick="navigateToCategoryPage('skincare')" class="bg-white text-brandDarkGreen font-bold text-[10px] px-4 py-1.5 rounded-lg mt-1 hover:bg-brandBg transition shadow-sm">Shop Sale</button>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=200" class="w-24 h-24 object-contain absolute right-2 bottom-2 drop-shadow-lg mix-blend-multiply">
-                    </div>
-                </section>
-
-                <section class="px-4 py-6">
-                    <div class="flex justify-between items-center mb-3">
-                        <div class="space-y-0.5">
-                            <h2 class="text-base font-black text-brandDarkGreen">Bestselling Products</h2>
-                        </div>
-                    </div>
-                    <div id="homepage-bestsellers-grid" class="grid grid-cols-2 gap-3.5"></div>
-                </section>
-
-                <section class="px-4 py-4 bg-brandLightGreen/40 rounded-t-[28px] border-t border-brandGreen/5">
-                    <h3 class="text-center font-bold text-brandDarkGreen text-sm mb-4">What Our Customers Say</h3>
-                    <div class="flex overflow-x-auto gap-3 no-scrollbar pb-2 snap-x snap-mandatory">
-                        <div class="bg-white p-3 rounded-xl border border-gray-100 min-w-[80%] snap-center space-y-2">
-                            <div class="flex text-yellow-400 text-[10px]"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                            <p class="text-xs text-gray-600 italic">"Excellent prices, undeniable charm, and the quality of the products is super outstanding!"</p>
-                            <span class="block text-[10px] font-bold text-brandGreen text-right">— Amina .A</span>
-                        </div>
-                        <div class="bg-white p-3 rounded-xl border border-gray-100 min-w-[80%] snap-center space-y-2">
-                            <div class="flex text-yellow-400 text-[10px]"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                            <p class="text-xs text-gray-600 italic">"I have been using the skincare line for months and my skin is glowing like never before."</p>
-                            <span class="block text-[10px] font-bold text-brandGreen text-right">— Sarah .M</span>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="px-4 py-6 bg-white">
-                    <div class="text-center space-y-1 mb-4">
-                        <h3 class="text-base font-bold text-brandDarkGreen">Would you like to consult us?</h3>
-                    </div>
-                    <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-3">
-                        <input type="text" id="contact-name" placeholder="Full Name" required class="w-full bg-brandBg border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-brandGreen">
-                        <input type="email" id="contact-email" placeholder="Email Address" required class="w-full bg-brandBg border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-brandGreen">
-                        <textarea id="contact-message" rows="3" placeholder="Write your message or consultation here..." required class="w-full bg-brandBg border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-brandGreen"></textarea>
-                        <button type="submit" class="w-full bg-brandGreen text-white py-2.5 rounded-xl text-xs font-bold shadow-md">Send Message</button>
-                    </form>
-                </section>
-            </div>
-
-            <div id="category-page" class="store-page px-4 py-4">
-                <div class="bg-gradient-to-r from-brandGreen to-brandDarkGreen rounded-2xl p-4 mb-4 flex items-center justify-between text-white shadow-sm">
-                    <div class="space-y-1">
-                        <h1 id="category-title-display" class="text-lg font-black">All Collections</h1>
-                        <p class="text-[10px] opacity-90">100% Pure Natural Products</p>
-                    </div>
-                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-xl"><i class="fas fa-sparkles text-brandGold"></i></div>
-                </div>
-
-                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-3">
-                    <button onclick="filterProducts('all')" id="tab-all" class="category-tab-btn active bg-brandGreen text-white text-xs font-bold px-4 py-2 rounded-xl whitespace-nowrap">All</button>
-                    <button onclick="filterProducts('skincare')" id="tab-skincare" class="category-tab-btn bg-white text-gray-600 border border-gray-100 text-xs font-medium px-4 py-2 rounded-xl whitespace-nowrap">Skin Care</button>
-                    <button onclick="filterProducts('haircare')" id="tab-haircare" class="category-tab-btn bg-white text-gray-600 border border-gray-100 text-xs font-medium px-4 py-2 rounded-xl whitespace-nowrap">Hair Care</button>
-                    <button onclick="filterProducts('bodycare')" id="tab-bodycare" class="category-tab-btn bg-white text-gray-600 border border-gray-100 text-xs font-medium px-4 py-2 rounded-xl whitespace-nowrap">Body Care</button>
-                </div>
-
-                <div class="flex justify-between items-center bg-white p-2.5 rounded-xl text-xs text-gray-500 mb-4 border border-gray-50 shadow-xs">
-                    <div><span>Products: <span id="products-count" class="font-bold text-gray-800">0</span></span></div>
-                    <select id="sort-select" onchange="handleSort()" class="bg-transparent font-medium text-gray-700 border-none outline-none focus:ring-0">
-                        <option value="default">Default Sorting</option>
-                        <option value="low-high">Price: Low to High</option>
-                        <option value="high-low">Price: High to Low</option>
-                    </select>
-                </div>
-
-                <div id="store-products-grid" class="grid grid-cols-2 gap-3.5"></div>
-            </div>
-
-            <div id="product-page" class="store-page px-4 py-4 text-left">
-                <button onclick="navigateTo('category-page')" class="text-xs font-bold text-brandGreen mb-3 inline-flex items-center space-x-1 bg-white px-3 py-1.5 rounded-lg border border-gray-100">
-                    <i class="fas fa-chevron-left text-[9px]"></i>
-                    <span>Back to Products</span>
-                </button>
-                
-                <div class="bg-white rounded-2xl p-4 shadow-xs border border-gray-50 space-y-4">
-                    <div class="flex gap-3">
-                        <div class="flex flex-col space-y-2 justify-start">
-                            <div onclick="changeProductPreviewImage(0)" class="thumb-img-box w-10 h-10 border-2 border-brandGreen bg-brandBg rounded-lg p-1 flex items-center justify-center cursor-pointer">
-                                <img id="p-thumb-1" src="" class="max-h-full object-contain">
-                            </div>
-                            <div onclick="changeProductPreviewImage(1)" class="thumb-img-box w-10 h-10 border border-gray-100 bg-brandBg rounded-lg p-1 flex items-center justify-center cursor-pointer opacity-60">
-                                <img id="p-thumb-2" src="" class="max-h-full object-contain">
-                            </div>
-                            <div onclick="changeProductPreviewImage(2)" class="thumb-img-box w-10 h-10 border border-gray-100 bg-brandBg rounded-lg p-1 flex items-center justify-center cursor-pointer opacity-60">
-                                <img id="p-thumb-3" src="" class="max-h-full object-contain">
-                            </div>
-                        </div>
-                        
-                        <div class="bg-brandLightGreen/40 rounded-xl p-4 flex items-center justify-center flex-grow h-60 relative">
-                            <img id="p-main-img" src="" class="max-h-full object-contain drop-shadow-md">
-                            <button id="p-fav-btn" onclick="toggleFavoriteCurrentProduct()" class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white flex items-center justify-center text-gray-300 hover:text-red-500 shadow-sm">
-                                <i class="fas fa-heart"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-1">
-                        <div class="flex justify-between items-start">
-                            <h1 id="p-title" class="text-lg font-black text-brandDarkGreen"></h1>
-                            <span id="p-category-badge" class="text-[9px] bg-brandLightGreen text-brandDarkGreen px-2 py-0.5 rounded font-bold">Skin</span>
-                        </div>
-                        <div class="flex items-center space-x-1 text-xs text-brandGold">
-                            <div class="flex"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                            <span class="text-gray-400 font-medium ml-2" id="p-reviews-count"></span>
-                        </div>
-                        <div class="flex items-baseline space-x-2 pt-1">
-                            <span id="p-price" class="text-xl font-extrabold text-brandGreen"></span>
-                            <span id="p-old-price" class="text-xs text-gray-400 line-through"></span>
-                        </div>
-                    </div>
-
-                    <p id="p-description" class="text-xs text-gray-500 leading-relaxed"></p>
-
-                    <div class="flex justify-between items-end pt-2 border-t border-gray-50">
-                       
-                        
-                        <div class="space-y-1.5">
-                            <span class="text-[10px] text-gray-400 block font-bold text-left">Quantity</span>
-                            <div class="flex items-center border border-gray-200 rounded-xl bg-gray-50 text-xs overflow-hidden h-8">
-                                <button onclick="decrementProductQty()" class="px-2.5 font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 text-sm h-full">-</button>
-                                <span id="p-qty-display" class="px-3 font-bold text-gray-800 text-sm">1</span>
-                                <button onclick="incrementProductQty()" class="px-2.5 font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 text-sm h-full">+</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button id="p-add-to-cart-action-btn" class="w-full bg-brandGreen text-white py-3 rounded-xl text-xs font-bold shadow-md hover:bg-brandDarkGreen flex items-center justify-center space-x-2">
-                        <i class="fas fa-shopping-basket text-[13px]"></i>
-                        <span>Add Product to Cart</span>
-                    </button>
-                </div>
-
-                <div class="mt-4 bg-white rounded-2xl p-4 shadow-xs border border-gray-50 space-y-3 text-xs">
-                    <div class="border-b pb-2 flex space-x-4 font-bold text-brandGreen">
-                        <button onclick="toggleProductTab('desc')" id="tab-btn-desc" class="product-tab-title-btn border-b-2 border-brandGreen pb-1 font-bold text-brandDarkGreen">About</button>
-                        
-                    </div>
-                    
-                    <div id="product-tab-content-desc" class="product-tab-body text-gray-600 leading-relaxed space-y-1">
-                        <p>A pure original product designed to take care of your beauty and protect you with fully natural ingredients.</p>
-                    </div>
-                    <div id="product-tab-content-usage" class="product-tab-body text-gray-600 leading-relaxed hidden">
-                        <p>Apply an appropriate, even amount to clean, dry skin twice daily.</p>
-                    </div>
-                    <div id="product-tab-content-ingredients" class="product-tab-body text-gray-600 leading-relaxed hidden">
-                        <p>Thermal water, aloe vera extract, vegetable glycerin, and pure Vitamin E.</p>
-                    </div>
-                </div>
-
-                <div class="mt-6 space-y-3">
-                    <h3 class="text-sm font-black text-brandDarkGreen">You May Also Like</h3>
-                    <div id="product-related-grid" class="grid grid-cols-2 gap-3"></div>
-                </div>
-            </div>
-
-            <div id="cart-page" class="store-page px-4 py-4 text-left">
-                <div class="flex justify-between items-center mb-4">
-                    <h1 class="text-lg font-black text-brandDarkGreen">Your Cart</h1>
-                    <button onclick="clearFullCart()" id="clear-cart-btn" class="text-[10px] text-red-500 font-bold hidden"><i class="fas fa-trash-alt mr-1"></i> Empty Cart</button>
-                </div>
-
-                <div id="empty-cart-view" class="bg-white rounded-2xl p-8 text-center space-y-4 border border-dashed border-gray-200">
-                    <div class="w-16 h-16 bg-brandLightGreen/50 text-brandGreen rounded-full flex items-center justify-center mx-auto">
-                        <i class="fas fa-shopping-basket text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-sm text-gray-800">Your shopping cart is currently empty</h3>
-                    <button onclick="navigateTo('category-page')" class="bg-brandGreen text-white text-xs px-6 py-2.5 rounded-xl font-bold w-full max-w-xs">
-                        Start Shopping Now
-                    </button>
-                </div>
-
-                <div id="populated-cart-view" class="space-y-4 hidden">
-                    <div id="cart-items-wrapper" class="space-y-3"></div>
-
-                    <div class="bg-white p-3 rounded-xl shadow-xs border border-gray-100 flex gap-2">
-                        <input type="text" id="coupon-code-input" placeholder="Promo code? " class="bg-brandBg border border-gray-200 rounded-lg px-3 py-1.5 text-xs flex-grow focus:outline-none focus:border-brandGreen">
-                        <button onclick="applyCouponCode()" class="bg-brandDarkGreen text-white text-xs font-bold px-4 py-1.5 rounded-lg">Apply</button>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-50 space-y-4">
-                        <h3 class="font-bold text-xs text-gray-900 border-b pb-2">Order Summary</h3>
-                        <div class="space-y-2.5 text-xs text-gray-600">
-                            <div class="flex justify-between"><span>Items Subtotal</span> <span id="cart-subtotal-display" class="font-bold text-gray-900">EGP0.00</span></div>
-                            <div id="coupon-discount-row" class="justify-between text-red-500 font-bold hidden"><span>Coupon Discount (10%)</span> <span id="coupon-discount-display">-$0.00</span></div>
-                            <div class="pt-1">
-                                <p class="text-[10px] text-gray-400 italic font-medium">* Shipping costs will be calculated on the next checkout step based on your city.</p>
-                            </div>
-                        </div>
-                        <button onclick="openCheckoutPage()" class="w-full bg-brandGreen text-white py-3 rounded-xl text-xs font-bold shadow-md text-center">
-                            Proceed to Checkout
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="checkout-page" class="store-page px-4 py-4 text-left">
-                <button onclick="navigateTo('cart-page')" class="text-xs font-bold text-brandGreen mb-3 inline-block"><i class="fas fa-chevron-left mr-1"></i> Edit Cart</button>
-                
-                <div class="space-y-4">
-                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 space-y-4">
-                        <h1 class="text-base font-black text-brandDarkGreen border-b pb-2">Shipping Information</h1>
-                        <form id="checkout-form" onsubmit="handleFinalCheckoutOrder(event)" class="space-y-3">
-                            <input type="text" id="checkout-name" required placeholder="Full Name" class="w-full bg-brandBg border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-brandGreen">
-                            <input type="tel" id="checkout-phone" required placeholder="Phone Number" class="w-full bg-brandBg border border-gray-200 rounded-xl px-3 py-2 text-xs text-left focus:outline-none focus:border-brandGreen">
-                            
-                            <div class="space-y-1">
-    <label class="text-[10px] font-bold text-gray-400 block">Select Governorate / City</label>
-    <select id="checkout-governorate" required onchange="calculateLiveCheckoutInvoice()" class="w-full bg-brandBg border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium text-gray-700 focus:outline-none focus:border-brandGreen">
-        <option value="" disabled selected>Choose your city...</option>
-        
-        <option value="Alexandria">Alexandria</option>
-        <option value="AlexandriaOutskirts">Alexandria Outskirts</option>
-        <option value="Cairo">Cairo</option>
-        <option value="Giza">Giza</option>
-        
-        <option value="Gharbia">Gharbia</option>
-        <option value="Sharqia">Sharqia</option>
-        <option value="Menoufia">Menoufia</option>
-        <option value="KafrElSheikh">Kafr El Sheikh</option>
-        <option value="Qalyubia">Qalyubia</option>
-        <option value="Dakahlia">Dakahlia</option>
-        <option value="Mansoura">Mansoura</option>
-        <option value="Ismailia">Ismailia</option>
-        <option value="Suez">Suez</option>
-        <option value="Beheira">Beheira</option>
-        <option value="Damietta">Damietta</option>
-        <option value="PortSaid">Port Said</option>
-        
-        <option value="BeniSuef">Beni Suef</option>
-        <option value="Faiyum">Faiyum</option>
-        <option value="Minya">Minya</option>
-        <option value="Qena">Qena</option>
-        <option value="Sohag">Sohag</option>
-        <option value="Asyut">Asyut</option>
-        <option value="Luxor">Luxor</option>
-        <option value="Aswan">Aswan</option>
-        
-        <option value="Matrouh">Matrouh</option>
-        <option value="NorthCoast">North Coast</option>
-        <option value="RedSea">Red Sea</option>
-        <option value="Hurghada">Hurghada</option>
-        <option value="NewValley">New Valley</option>
-        <option value="SharmElSheikh">Sharm El Sheikh</option>
-    </select>
+  <div class="section-head" style="padding:0 15px; margin-top:28px;"><div class="swoop"></div><h2>All Products</h2><div class="rule"></div></div>
+  <div class="grid" id="product-grid"></div>
 </div>
 
-                            <input type="text" id="checkout-address" required placeholder="Detailed Address (Street, Building, Apt)" class="w-full bg-brandBg border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-brandGreen">
-                            
-                            <div class="bg-brandBg/60 border border-gray-100 rounded-xl p-3.5 space-y-3 mt-4">
-                                <h3 class="font-bold text-xs text-brandDarkGreen border-b pb-1.5">Checkout Invoice</h3>
-                                <div class="space-y-2 text-xs text-gray-600">
-                                    <div class="flex justify-between"><span>Subtotal</span> <span id="chk-subtotal" class="font-bold text-gray-800">EGP0.00</span></div>
-                                    <div class="flex justify-between"><span>Shipping Fees</span> <span id="chk-shipping" class="font-bold text-gray-800">Select city</span></div>
-                                    <div id="chk-discount-row" class="justify-between text-red-500 font-bold hidden"><span>Discount</span> <span id="chk-discount">-EGP0.00</span></div>
-                                    <div class="bg-brandLightGreen/50 text-brandDarkGreen p-2.5 rounded-lg text-[10px] flex items-center space-x-2">
-                                        <i class="fas fa-money-bill-wave text-brandGreen"></i>
-                                        <span>Payment: <strong>Cash on Delivery (COD)</strong></span>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center font-black text-sm text-gray-900 border-t pt-2 mt-1">
-                                    <span>Grand Total</span>
-                                    <span id="chk-total" class="text-brandGreen text-base font-black">EGP0.00</span>
-                                </div>
-                            </div>
+<div id="offers" class="view-section">
+  <div class="section-head"><div class="swoop"></div><h2>Offers</h2><div class="rule"></div></div>
+  <div class="promo-box">
+    <div class="icon"><i class="fas fa-percent"></i></div>
+    <div><b>10% off every order</b><br><small>Applied automatically at checkout when you buy fewer than 3 pieces.</small></div>
+  </div>
+  <div class="promo-box">
+    <div class="icon"><i class="fas fa-fire"></i></div>
+    <div><b>Buy 3+, get 50% off your cheapest piece</b><br><small>The lowest-priced item in your cart is automatically discounted by half.</small></div>
+  </div>
+  <div class="promo-box">
+    <div class="icon"><i class="fas fa-truck"></i></div>
+    <div><b>Free delivery on 3+ pieces</b><br><small>Otherwise a flat 40 EGP delivery fee applies.</small></div>
+  </div>
+  <div class="promo-box">
+    <div class="icon"><i class="fas fa-location-dot"></i></div>
+    <div><b>Alexandria delivery only</b><br><small>Orders currently ship within Alexandria.</small></div>
+  </div>
+</div>
 
-                            <button type="submit" class="w-full bg-brandGreen text-white py-3 rounded-xl text-xs font-bold shadow-md text-center mt-2">
-                                Confirm Order (WhatsApp Checkout)
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div id="favorites-page" class="store-page px-4 py-4 text-left">
-                <h1 class="text-lg font-black text-brandDarkGreen mb-4">Your Wishlist</h1>
-                <div id="favorites-items-grid" class="grid grid-cols-2 gap-3.5"></div>
-                <div id="empty-favorites-view" class="bg-white rounded-2xl p-8 text-center space-y-3 border border-dashed border-gray-200">
-                    <div class="text-gray-300 text-3xl"><i class="far fa-heart"></i></div>
-                    <p class="text-xs text-gray-400">You haven't added any products to your wishlist yet.</p>
-                </div>
-            </div>
-
-            <div id="search-page" class="store-page px-4 py-4 text-left">
-                <div class="bg-white p-3 rounded-xl shadow-xs border border-gray-100 flex gap-2 mb-4">
-                    <input type="text" id="main-search-input" oninput="executeSearchQuery()" placeholder="Search for serum, lotion, cream..." class="bg-brandBg border border-gray-200 rounded-lg px-3 py-1.5 text-xs flex-grow focus:outline-none focus:border-brandGreen">
-                    <div class="bg-brandGreen text-white px-3 flex items-center justify-center rounded-lg"><i class="fas fa-search text-xs"></i></div>
-                </div>
-                <div id="search-results-grid" class="grid grid-cols-2 gap-3.5"></div>
-                <div id="search-placeholder-view" class="text-center py-12 text-gray-400 text-xs">
-                    <i class="fas fa-search text-xl block mb-2 opacity-50"></i> Type product name to search...
-                </div>
-            </div>
-
-        </main>
-
-        <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur border-t border-gray-100 py-2.5 px-4 grid grid-cols-4 gap-1 text-center z-50 nav-clip rounded-t-2xl">
-            <button onclick="navigateTo('home-page')" id="nav-btn-home" class="bottom-nav-item text-brandGreen flex flex-col items-center space-y-1">
-                <i class="fas fa-home text-base"></i><span class="text-[9px] font-bold">Home</span>
-            </button>
-            <button onclick="navigateTo('category-page')" id="nav-btn-category" class="bottom-nav-item text-gray-400 flex flex-col items-center space-y-1">
-                <i class="fas fa-th-large text-base"></i><span class="text-[9px] font-medium">Categories</span>
-            </button>
-            <button onclick="navigateTo('cart-page')" id="nav-btn-cart" class="bottom-nav-item text-gray-400 flex flex-col items-center space-y-1 relative">
-                <i class="fas fa-shopping-basket text-base"></i><span class="text-[9px] font-medium">Cart</span>
-                <span id="nav-cart-dot" class="absolute top-0 right-7 w-2 h-2 bg-brandGreen rounded-full hidden"></span>
-            </button>
-            <button onclick="navigateTo('favorites-page')" id="nav-btn-favorites" class="bottom-nav-item text-gray-400 flex flex-col items-center space-y-1">
-                <i class="fas fa-heart text-base"></i><span class="text-[9px] font-medium">Favorites</span>
-            </button>
-        </div>
+<div id="details" class="view-section">
+  <button class="back-btn" onclick="showView('home')">← Back</button>
+  <div class="slider-container">
+    <div class="share-btn-float" onclick="event.stopPropagation(); openShareMenu()">
+      <i class="fas fa-share-alt"></i>
     </div>
+    <div class="slider-nav">
+      <button class="arrow" onclick="changeSlide(-1)">❮</button>
+      <button class="arrow" onclick="changeSlide(1)">❯</button>
+    </div>
+    <div class="slider-track" id="slider-track"></div>
+  </div>
+  <h1 id="det-title"></h1>
+  <div id="det-price"></div>
 
-    <script>
-        // داتابيز أسعار الشحن حسب كل محافظة (يمكنك تغيير الأسعار هنا كما تشاء)
-        const SHIPPING_PRICES = {
-           
-   
-  "Alexandria": 55,
-  "AlexandriaOutskirts": 70,
-  "Cairo": 95,
-  "Giza": 95,
-  "Gharbia": 85,
-  "Sharqia": 85,
-  "Menoufia": 85,
-  "KafrElSheikh": 85,
-  "Qalyubia": 85,
-  "Dakahlia": 85,
-  "Mansoura": 85,
-  "Ismailia": 85,
-  "Suez": 85,
-  "Beheira": 85,
-  "Damietta": 85,
-  "PortSaid": 90,
-  "BeniSuef": 125,
-  "Faiyum": 125,
-  "Minya": 125,
-  "Qena": 125,
-  "Sohag": 125,
-  "Asyut": 130,
-  "Luxor": 130,
-  "Aswan": 130,
-  "Matrouh": 135,
-  "NorthCoast": 140,
-  "RedSea": 135,
-  "Hurghada": 135,
-  "NewValley": 135,
-  "SharmElSheikh": 180
+  <div style="margin-bottom:16px;">
+    <span class="field-label">Color: <span id="color-name" style="color:var(--mist)"></span></span>
+    <div id="color-picker" style="margin-top:10px;"></div>
+  </div>
 
+  <div style="margin-bottom:16px;">
+    <span class="field-label">Size</span>
+    <div id="size-picker" style="margin-top:10px;">
+      <div class="size-chip" onclick="selectSize(this)">S</div>
+      <div class="size-chip selected" onclick="selectSize(this)">M</div>
+      <div class="size-chip" onclick="selectSize(this)">L</div>
+    </div>
+  </div>
 
-// ملاحظة: يتم إضافة رسوم على كل كيلو إضافي بعد 3 كيلو
-        };
+  <div class="product-qty-box">
+    <button class="qty-btn-circle" onclick="changeDetailQty(-1)">-</button>
+    <span id="detail-qty-value" style="font-family:'Space Grotesk'; font-weight:600; font-size:17px;">1</span>
+    <button class="qty-btn-circle" onclick="changeDetailQty(1)">+</button>
+  </div>
 
-        const PRODUCTS_DATABASE = [
-            {
-                id: "prod-001",
-                title: "Argan Serum",
-                price: 120,
-                oldPrice: 150,
-                category: "haircare",
-                image: "photo_2026-06-30_03-07-00 (3).jpg",
-                description: "Natural serum with a lightweight formula to deeply nourish and brighten skin cells and pores with incredible speed without leaving any annoying greasy shine.",
-                isBestseller: true,
-                reviews: 128
-            },
-            {
-                id: "prod-002",
-                title: "Caffeine Lotion",
-                price: 120,
-                oldPrice: 150,
-                category: "haircare",
-                image: "photo_2026-06-30_03-07-00.jpg",
-                description: "Deep moisturizing cream enriched with natural shea butter and aloe vera to provide an integrated layer of protection for your skin that lasts throughout the day.",
-                isBestseller: true,
-                reviews: 94
-            },
-            {
-                id: "prod-003",
-                title: "Collagen Sulfate-Free Shampoo",
-                price: 120,
-                oldPrice: 150,
-                category: "haircare",
-                image: "photo_2026-06-30_03-07-02 (2).jpg",
-                description: "Carefully distilled pure rose water toner that balances skin pH and soothes the skin from daily exhaustion and environmental factors.",
-                isBestseller: true,
-                reviews: 142
-            },
-            {
-                id: "prod-004",
-                title: "Formalin-Free Hair Protein",
-                price:  4.5,
-                oldPrice: 6,
-                category: "haircare",
-                image: "photo_2026-06-30_03-07-01.jpg",
-                description: "A specialized shampoo to nourish weak and damaged hair follicles from roots to ends, giving it brilliant shine, vitality, and wonderful volume.",
-                isBestseller: false,
-                reviews: 67
-            },
-            {
-                id: "prod-005",
-                title: "Collagen Styling Cream",
-                price: 130,
-                oldPrice: 155,
-                category: "haircare",
-                image: "photo_2026-06-30_03-07-01 (3).jpg",
-                description: "Natural cooling aloe vera gel to moisturize, soothe, and efficiently calm the skin after prolonged exposure to the hot sun.",
-                isBestseller: true,
-                reviews: 83
-            },
-            {
-                id: "prod-006",
-                title: "skin Cream",
-                price: 175,
-                oldPrice: 220,
-                category: "skincare",
-                image: "photo_2026-06-30_03-07-01 (2).jpg",
-                description: "Natural cooling aloe vera gel to moisturize, soothe, and efficiently calm the skin after prolonged exposure to the hot sun.",
-                isBestseller: true,
-                reviews: 83
-            },
-            {
-                id: "prod-007",
-                title: "Sunblock",
-                price: 150,
-                oldPrice: 170,
-                category: "skincare",
-                image: "photo_2026-06-30_03-07-01 (4).jpg",
-                description: "Natural cooling aloe vera gel to moisturize, soothe, and efficiently calm the skin after prolonged exposure to the hot sun.",
-                isBestseller: true,
-                reviews: 83
-            },
-             {
-                id: "prod-008",
-                title: "Foaming Face Wash",
-                price: 99,
-                oldPrice: 150,
-                category: "skincare",
-                image: "photo_2026-06-30_03-07-02 (3).jpg",
-                description: "Natural cooling aloe vera gel to moisturize, soothe, and efficiently calm the skin after prolonged exposure to the hot sun.",
-                isBestseller: true,
-                reviews: 83
-            },
-            {
-                id: "prod-008",
-                title: "Deodorant",
-                price: 90,
-                oldPrice: 120,
-                category: "bodycare",
-                image: "photo_2026-06-30_03-07-00 (2).jpg",
-                description: "Natural cooling aloe vera gel to moisturize, soothe, and efficiently calm the skin after prolonged exposure to the hot sun.",
-                isBestseller: true,
-                reviews: 83
-            },
-            {
-                id: "prod-008",
-                title: "Foaming Face Wash",
-                price: 4.5,
-                oldPrice: 6,
-                category: "skincare",
-                image: "photo_2026-06-30_03-07-02.jpg",
-                description: "Natural cooling aloe vera gel to moisturize, soothe, and efficiently calm the skin after prolonged exposure to the hot sun.",
-                isBestseller: true,
-                reviews: 83
-            },
-        ];
+  <div style="display:flex; gap:10px; margin-top:16px;">
+    <button class="btn-main btn-ghost" onclick="addToCart()">Add to Cart</button>
+    <button class="btn-main btn-gold" onclick="openCheckout()">Order Now</button>
+  </div>
 
-        let shoppingCart = [];
-        let favoriteProducts = [];
-        let currentSelectedCategory = 'all';
-        let currentViewingProduct = null;
-        let isCouponApplied = false;
+  <div class="other-products-section">
+    <div class="section-head"><div class="swoop"></div><h2 style="font-size:16px;">Other Products</h2><div class="rule"></div></div>
+    <div class="grid" id="other-products-grid" style="padding:0;"></div>
+  </div>
+</div>
 
-        window.addEventListener('DOMContentLoaded', () => {
-            renderHomepageBestsellers();
-            renderStoreProducts();
-            updateGlobalBadgesAndUI();
-        });
+<div id="favorites" class="view-section">
+  <div class="section-head"><div class="swoop"></div><h2>My Favorites</h2><div class="rule"></div></div>
+  <div id="fav-list"></div>
+</div>
 
-        function navigateTo(pageId) {
-            document.querySelectorAll('.store-page').forEach(page => page.classList.remove('active'));
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) targetPage.classList.add('active');
+<div id="cart" class="view-section">
+  <div class="section-head"><div class="swoop"></div><h2>Shopping Cart</h2><div class="rule"></div></div>
+  <div id="cart-list"></div>
+  <div id="cart-footer" style="margin-top:20px; display:none;">
+    <div id="total-price" style="margin-bottom:16px;"></div>
+    <button class="btn-main btn-gold" onclick="openCheckout()">Order All</button>
+  </div>
+</div>
 
-            document.querySelectorAll('.bottom-nav-item').forEach(btn => {
-                btn.classList.remove('text-brandGreen'); btn.classList.add('text-gray-400');
-                btn.querySelector('span').classList.replace('font-bold', 'font-medium');
-            });
+<div id="about" class="view-section">
+  <div class="section-head"><div class="swoop"></div><h2>Who Us?</h2><div class="rule"></div></div>
+  <div class="about-copy">
+    <p><b>Hawk Store</b> is precision, speed, power. Hawk is the armor for the modern athlete. We combine elite fabrics with a fearless attitude to help you reach your peak. No limits. Just results. Wear the power.</p>
+  </div>
+</div>
 
-            if (pageId === 'home-page') setActiveBottomNav('nav-btn-home');
-            else if (pageId === 'category-page') setActiveBottomNav('nav-btn-category');
-            else if (pageId === 'cart-page') setActiveBottomNav('nav-btn-cart');
-            else if (pageId === 'favorites-page') setActiveBottomNav('nav-btn-favorites');
+<div id="checkout" class="view-section">
+  <button class="back-btn" onclick="showView('cart')">← Back</button>
+  <div class="order-form">
+    <div class="section-head"><div class="swoop"></div><h2 style="font-size:18px;">Checkout Details</h2><div class="rule"></div></div>
+    <input type="text" id="cust-name" placeholder="Your Full Name">
+    <input type="tel" id="cust-phone" placeholder="Phone Number">
+    <textarea id="cust-address" rows="3" placeholder="Shipping Address (Alexandria)"></textarea>
+    <button class="btn-main btn-gold" onclick="sendOrderToWhatsApp()">Confirm Order</button>
+  </div>
+</div>
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+<div class="overlay" id="share-overlay"></div>
+<div class="share-menu" id="share-menu" onclick="event.stopPropagation()">
+  <h3>Share Product</h3>
+  <div class="share-option" onclick="shareToWhatsApp()">
+    <i class="fab fa-whatsapp" style="color:#25D366; font-size:22px;"></i>
+    <span>Share via WhatsApp</span>
+  </div>
+  <div class="share-option" onclick="copyProductLink()">
+    <i class="fas fa-link" style="color:var(--gold); font-size:18px;"></i>
+    <span>Copy Product Link</span>
+  </div>
+  <button class="btn-main btn-ghost" onclick="closeShare()">Cancel</button>
+</div>
 
-        function setActiveBottomNav(btnId) {
-            const btn = document.getElementById(btnId);
-            if (btn) {
-                btn.classList.replace('text-gray-400', 'text-brandGreen');
-                btn.querySelector('span').classList.replace('font-medium', 'font-bold');
-            }
-        }
+<nav>
+  <div class="nav-btn active" onclick="showView('home', this)"><span><i class="fas fa-house"></i></span>Home</div>
+  <div class="nav-btn" onclick="showView('offers', this)"><span><i class="fas fa-tag"></i></span>Offers</div>
+  <div class="cart-btn-wrapper">
+    <button class="cart-circle nav-btn" onclick="showView('cart', this)">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-badge" id="cart-count"></span>
+    </button>
+  </div>
+  <div class="nav-btn" onclick="showView('favorites', this)"><span><i class="fas fa-heart"></i></span>Favs</div>
+  <div class="nav-btn" onclick="showView('about', this)"><span><i class="fas fa-feather-pointed"></i></span>Who Us</div>
+</nav>
 
-        function scrollToCategories() {
-            const section = document.getElementById('categories-section');
-            if (section) section.scrollIntoView({ behavior: 'smooth' });
-        }
+<script>
+// ---------- helpers ----------
+function displayMedia(media) {
+  if (!media) return '';
+  return `<img src="${media}" alt="Product" onerror="this.parentElement.innerHTML='🖼️'">`;
+}
 
-        function navigateToCategoryPage(categoryCode) {
-            navigateTo('category-page');
-            filterProducts(categoryCode);
-        }
+// ---------- product data (ids de-duplicated: every product now has a unique id) ----------
+const products = [
+  { id: 1, name: "Hawk Classic T-shirt", price: 250, isOut: false, isBestSeller: false, variants: [
+      { name: 'White', hex: '#ffffff', images: ['WhatsApp Image 2026-04-03 at 2.15.22 PM (1).jpeg','WhatsApp Image 2026-04-03 at 2.15.22 PM (2).jpeg','size.jpeg'] },
+    ]
+  },
+  { id: 2, name: "Super Man T-shirt", price: 270, isOut: false, isBestSeller: true, variants: [
+      { name: 'Black', hex: '#000', images: ['WhatsApp Image 2026-04-10 at 2.15.41 PM.jpeg','WhatsApp Image 2026-04-03 at 2.15.20 PM.jpeg','size.jpeg'] },
+      { name: 'White', hex: '#ffffff', images: ['WhatsApp Image 2026-04-10 at 2.20.00 PM.jpeg','WhatsApp Image 2026-04-03 at 2.15.22 PM (2).jpeg','size.jpeg'] }
+    ]
+  },
+  { id: 3, name: "Sakr T-shirt", price: 270, isOut: false, isBestSeller: false, variants: [
+      { name: 'White', hex: '#ffffff', images: ['WhatsApp Image 2026-04-03 at 3.06.22 PM.jpeg','WhatsApp Image 2026-04-03 at 2.15.22 PM (2).jpeg','size.jpeg'] },
+      { name: 'Black', hex: '#000', images: ['WhatsApp Image 2026-04-03 at 2.15.21 PM (3).jpeg','WhatsApp Image 2026-04-03 at 2.15.20 PM.jpeg','size.jpeg'] }
+    ]
+  },
+  { id: 4, name: "Sportif T-shirt", price: 250, isOut: false, isBestSeller: false, variants: [
+      { name: 'White', hex: '#ffffff', images: ['WhatsApp Image 2026-04-03 at 2.15.21 PM (1).jpeg','WhatsApp Image 2026-04-03 at 2.15.22 PM (2).jpeg','size.jpeg'] },
+      { name: 'Black', hex: '#000', images: ['WhatsApp Image 2026-04-03 at 2.15.21 PM (2).jpeg','WhatsApp Image 2026-04-03 at 2.15.20 PM.jpeg','size.jpeg'] }
+    ]
+  },
+  { id: 5, name: "Talon Hawk T-shirt", price: 270, isOut: true, isBestSeller: false, variants: [
+      { name: 'Black', hex: '#000', images: ['WhatsApp Image 2026-04-03 at 2.15.22 PM.jpeg','WhatsApp Image 2026-04-03 at 2.15.20 PM.jpeg','size.jpeg'] }
+    ]
+  },
+  { id: 6, name: "Spider T-shirt", price: 270, isOut: false, isBestSeller: true, variants: [
+      { name: 'Black', hex: '#000', images: ['WhatsApp Image 2026-04-03 at 2.15.19 PM.jpeg','WhatsApp Image 2026-04-03 at 2.15.20 PM.jpeg','size.jpeg'] },
+      { name: 'White', hex: '#ffffff', images: ['WhatsApp Image 2026-04-03 at 2.15.19 PM (1).jpeg','WhatsApp Image 2026-04-03 at 2.15.22 PM (2).jpeg','size.jpeg'] }
+    ]
+  },
+  { id: 7, name: "Sakr T-shirt", price: 270, isOut: false, isBestSeller: false, variants: [
+      { name: 'White', hex: '#ffffff', images: ['WhatsApp Image 2026-04-03 at 3.06.22 PM.jpeg','WhatsApp Image 2026-04-03 at 2.15.22 PM (2).jpeg','size.jpeg'] },
+      { name: 'Black', hex: '#000', images: ['WhatsApp Image 2026-04-03 at 2.15.21 PM (3).jpeg','WhatsApp Image 2026-04-03 at 2.15.20 PM.jpeg','size.jpeg'] }
+    ]
+  },
+  { id: 8, name: "Hawk T-shirt", price: 270, isOut: true, isBestSeller: false, variants: [
+      { name: 'Black', hex: '#000', images: ['b.hawk.jpeg','WhatsApp Image 2026-04-03 at 2.15.20 PM.jpeg','size.jpeg'] }
+    ]
+  },
+  { id: 9, name: "Hand Ball T-shirt", price: 270, isOut: false, isBestSeller: true, variants: [
+      { name: 'White', hex: '#ffffff', images: ['hand_tishirt-removebg-preview.png','WhatsApp Image 2026-04-03 at 2.15.22 PM (2).jpeg','size.jpeg'] },
+    ]
+  },
+];
 
-        function renderHomepageBestsellers() {
-            const container = document.getElementById('homepage-bestsellers-grid');
-            if (!container) return;
-            container.innerHTML = '';
-            PRODUCTS_DATABASE.filter(p => p.isBestseller).forEach(product => {
-                container.innerHTML += createProductCardHtml(product);
-            });
-        }
+// ---------- state ----------
+let cart = [], favorites = [], currentProduct = null, currentVariant = null, selectedSize = "M", currentSlide = 0, detailQty = 1, isQuickOrder = false;
 
-        function renderStoreProducts() {
-            const container = document.getElementById('store-products-grid');
-            if (!container) return;
-            let filtered = currentSelectedCategory === 'all' ? PRODUCTS_DATABASE : PRODUCTS_DATABASE.filter(p => p.category === currentSelectedCategory);
-            document.getElementById('products-count').innerText = filtered.length;
-            container.innerHTML = '';
-            filtered.forEach(product => { container.innerHTML += createProductCardHtml(product); });
-        }
+// ---------- cart badge ----------
+function updateCartBadge() {
+  const badge = document.getElementById('cart-count');
+  if (!badge) return;
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  badge.innerText = totalItems;
+  badge.style.display = totalItems > 0 ? 'flex' : 'none';
+}
 
-        function createProductCardHtml(product) {
-            const isFav = favoriteProducts.includes(product.id) ? 'fas text-red-500' : 'far text-gray-300';
-            return `
-                <div class="bg-white p-3 rounded-2xl shadow-xs border border-gray-100 flex flex-col justify-between relative animate-slideUp">
-                    <button onclick="toggleFavoriteProduct('${product.id}', event)" class="absolute top-2.5 right-2.5 w-7 h-7 bg-white/80 rounded-full flex items-center justify-center shadow-xs text-xs z-10">
-                        <i class="${isFav} fa-heart"></i>
-                    </button>
-                    <div onclick="openProductDetailView('${product.id}')" class="cursor-pointer space-y-1.5 flex-grow">
-                        <div class="bg-brandBg rounded-xl p-3 h-32 flex items-center justify-center">
-                            <img src="${product.image}" class="max-h-full object-contain mix-blend-multiply">
-                        </div>
-                        <h4 class="font-bold text-xs text-gray-800 line-clamp-2 leading-tight">${product.title}</h4>
-                        <div class="flex items-baseline space-x-1">
-                            <span class="text-brandGreen font-black text-xs">EGP${product.price.toFixed(2)}</span>
-                            <span class="text-[9px] text-gray-400 line-through">EGP${product.oldPrice.toFixed(2)}</span>
-                        </div>
-                    </div>
-                    <button onclick="addProductToCartDirect('${product.id}', event)" class="bg-brandGreen text-white text-[11px] font-bold py-2 rounded-xl mt-3 w-full flex items-center justify-center space-x-1 shadow-xs">
-                        <i class="fas fa-plus text-[9px]"></i><span>Add to Cart</span>
-                    </button>
-                </div>
-            `;
-        }
+// ---------- search ----------
+function searchProducts(query) {
+  const filtered = products.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
+  renderHome(filtered);
+  const bsSection = document.getElementById('bestsellers-section');
+  if (bsSection) bsSection.style.display = query.trim() ? 'none' : 'block';
+}
+function searchApp(val) { searchProducts(val); }
 
-        function filterProducts(categoryCode) {
-            currentSelectedCategory = categoryCode;
-            document.querySelectorAll('.category-tab-btn').forEach(btn => {
-                btn.className = "category-tab-btn bg-white text-gray-600 border border-gray-100 text-xs font-medium px-4 py-2 rounded-xl";
-            });
-            const activeBtn = document.getElementById(`tab-${categoryCode}`);
-            if (activeBtn) activeBtn.className = "category-tab-btn active bg-brandGreen text-white text-xs font-bold px-4 py-2 rounded-xl shadow-xs";
-            renderStoreProducts();
-        }
+// ---------- banner ----------
+let currentBanner = 0;
+function nextBanner() {
+  const track = document.getElementById('banner-track');
+  const dots = document.querySelectorAll('#banner-dots span');
+  if (!track) return;
+  currentBanner = (currentBanner + 1) % 2;
+  track.style.transform = `translateX(-${currentBanner * 100}%)`;
+  dots.forEach((d, i) => d.classList.toggle('on', i === currentBanner));
+}
+setInterval(nextBanner, 4000);
 
-        function handleSort() {
-            const val = document.getElementById('sort-select').value;
-            if (val === 'low-high') PRODUCTS_DATABASE.sort((a, b) => a.price - b.price);
-            else if (val === 'high-low') PRODUCTS_DATABASE.sort((a, b) => b.price - a.price);
-            renderStoreProducts();
-        }
+// ---------- navigation ----------
+function showView(id, btn) {
+  document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+  const targetView = document.getElementById(id);
+  if (targetView) targetView.classList.add('active');
 
-        let currentQtyForViewingProduct = 1;
-        function openProductDetailView(productId) {
-            const product = PRODUCTS_DATABASE.find(p => p.id === productId);
-            if (!product) return;
-            currentViewingProduct = product; currentQtyForViewingProduct = 1;
+  if (btn) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
 
-            document.getElementById('p-title').innerText = product.title;
-            document.getElementById('p-price').innerText = `EGP${product.price.toFixed(2)}`;
-            document.getElementById('p-old-price').innerText = `EGP${product.oldPrice.toFixed(2)}`;
-            document.getElementById('p-description').innerText = product.description;
-            document.getElementById('p-reviews-count').innerText = `(${product.reviews} reviews)`;
-            document.getElementById('p-qty-display').innerText = currentQtyForViewingProduct;
-            
-            document.getElementById('p-main-img').src = product.image;
-            document.getElementById('p-thumb-1').src = product.image;
-           
-            document.getElementById('p-add-to-cart-action-btn').onclick = function() {
-                addProductToCartWithQty(product.id, currentQtyForViewingProduct);
-            };
+  if (id === 'cart') renderCartUI();
+  if (id === 'favorites') renderFavUI();
+}
 
-            renderRelatedProducts(product.category, product.id);
-            navigateTo('product-page');
-        }
+// ---------- home grid ----------
+function renderHome(data = products) {
+  const grid = document.getElementById('product-grid');
+  if (!grid) return;
 
-        
-       
+  if (data.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><span class="glyph">🔎</span>No products match your search.</div>`;
+    return;
+  }
 
-        function incrementProductQty() { currentQtyForViewingProduct++; document.getElementById('p-qty-display').innerText = currentQtyForViewingProduct; }
-        function decrementProductQty() { if (currentQtyForViewingProduct > 1) { currentQtyForViewingProduct--; document.getElementById('p-qty-display').innerText = currentQtyForViewingProduct; } }
+  grid.innerHTML = data.map(p => {
+    const isOut = p.isOut;
+    const clickAction = isOut ? "" : `onclick="openDetails(${p.id})"`;
+    const isFavorite = favorites.includes(p.id);
+    const showBest = p.isBestSeller && !isOut;
 
-        function toggleProductTab(tabId) {
-            document.querySelectorAll('.product-tab-body').forEach(b => b.classList.add('hidden'));
-            document.querySelectorAll('.product-tab-title-btn').forEach(b => b.className = "product-tab-title-btn text-gray-400 pb-1 font-medium");
-            document.getElementById(`product-tab-content-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tabId}`).className = "product-tab-title-btn border-b-2 border-brandGreen pb-1 font-bold text-brandDarkGreen";
-        }
+    return `
+    <div class="card cut" style="${isOut ? 'opacity:0.6;' : ''}">
+      <div class="fav-btn" onclick="event.stopPropagation(); toggleFav(${p.id})">
+        ${isFavorite ? '❤️' : '🤍'}
+      </div>
+      ${isOut ? '<div class="out-badge">Sold Out</div>' : (showBest ? '<div class="best-badge"><i class="fas fa-bolt"></i>Best Seller</div>' : '')}
+      <div class="img-box" ${clickAction}>${displayMedia(p.variants[0].images[0])}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-price">EGP ${p.price}</div>
+    </div>
+    `;
+  }).join('');
+}
 
-        function renderRelatedProducts(category, id) {
-            const grid = document.getElementById('product-related-grid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            PRODUCTS_DATABASE.filter(p => p.category === category && p.id !== id).slice(0, 2).forEach(product => {
-                grid.innerHTML += `
-                    <div onclick="openProductDetailView('${product.id}')" class="bg-white p-2 rounded-xl border border-gray-50 text-left cursor-pointer">
-                        <div class="bg-brandBg rounded-lg p-2 h-24 flex items-center justify-center mb-1"><img src="${product.image}" class="max-h-full object-contain mix-blend-multiply"></div>
-                        <h4 class="font-bold text-[11px] text-gray-800 truncate">${product.title}</h4>
-                        <span class="text-brandGreen font-black text-xs block">EGP${product.price.toFixed(2)}</span>
-                    </div>
-                `;
-            });
-        }
+// ---------- best sellers strip ----------
+function renderBestSellers() {
+  const strip = document.getElementById('bestseller-scroll');
+  if (!strip) return;
+  const bestItems = products.filter(p => p.isBestSeller && !p.isOut);
 
-        function addProductToCartDirect(id, e) { if (e) e.stopPropagation(); addProductToCartWithQty(id, 1); }
+  if (bestItems.length === 0) {
+    strip.innerHTML = '';
+    return;
+  }
 
-        function addProductToCartWithQty(id, qty) {
-            const product = PRODUCTS_DATABASE.find(p => p.id === id);
-            if (!product) return;
-            let existing = shoppingCart.find(i => i.productId === id);
-            if (existing) existing.qty += qty;
-            else shoppingCart.push({ productId: id, title: product.title, price: product.price, image: product.image, qty: qty });
-            updateGlobalBadgesAndUI(); renderCartPageContents();
-            showToast(`Added ${qty} item(s) successfully!`);
-        }
+  strip.innerHTML = bestItems.map((p, i) => `
+    <div class="bs-card cut-sm" onclick="openDetails(${p.id})">
+      <div class="bs-rank">${i + 1}</div>
+      <div class="img-box">${displayMedia(p.variants[0].images[0])}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-price">EGP ${p.price}</div>
+    </div>
+  `).join('');
+}
 
-        function changeCartItemQty(id, delta) {
-            let item = shoppingCart.find(i => i.productId === id);
-            if (!item) return;
-            item.qty += delta;
-            if (item.qty <= 0) shoppingCart = shoppingCart.filter(i => i.productId !== id);
-            updateGlobalBadgesAndUI(); renderCartPageContents();
-        }
+// ---------- favorites ----------
+function toggleFav(id) {
+  if (favorites.includes(id)) favorites = favorites.filter(fid => fid !== id);
+  else favorites.push(id);
+  renderHome();
+  renderFavUI();
+}
 
-        function removeCartItem(id) {
-            shoppingCart = shoppingCart.filter(i => i.productId !== id);
-            updateGlobalBadgesAndUI(); renderCartPageContents();
-        }
+function renderFavUI() {
+  const list = document.getElementById('fav-list');
+  if (!list) return;
+  const favItems = products.filter(p => favorites.includes(p.id));
+  if (favItems.length === 0) {
+    list.innerHTML = `<div class="empty-state"><span class="glyph">🤍</span>No favorites yet.</div>`;
+    return;
+  }
+  list.innerHTML = favItems.map(p => `
+    <div class="list-item" onclick="openDetails(${p.id})">
+      <div class="list-img">${displayMedia(p.variants[0].images[0])}</div>
+      <div style="flex:1"><b>${p.name}</b></div>
+      <div style="color:var(--rust); cursor:pointer; font-size:18px;" onclick="event.stopPropagation(); toggleFav(${p.id})">❤️</div>
+    </div>
+  `).join('');
+}
 
-        function clearFullCart() { shoppingCart = []; isCouponApplied = false; updateGlobalBadgesAndUI(); renderCartPageContents(); }
+// ---------- product details ----------
+function openDetails(id) {
+  currentProduct = products.find(p => p.id === id);
+  if (!currentProduct) return;
+  currentVariant = currentProduct.variants[0];
+  selectedSize = "M";
+  detailQty = 1;
 
-        // تم تعديل سلة المشتريات لحذف سعر الشحن منها بناء على طلبك
-        function renderCartPageContents() {
-            const empty = document.getElementById('empty-cart-view');
-            const populated = document.getElementById('populated-cart-view');
-            const wrapper = document.getElementById('cart-items-wrapper');
-            const clearBtn = document.getElementById('clear-cart-btn');
+  const qtyEl = document.getElementById('detail-qty-value');
+  if (qtyEl) qtyEl.innerText = detailQty;
 
-            if (shoppingCart.length === 0) {
-                empty.classList.remove('hidden'); populated.classList.add('hidden'); clearBtn.classList.add('hidden'); return;
-            }
-            empty.classList.add('hidden'); populated.classList.remove('hidden'); clearBtn.classList.remove('hidden');
-            wrapper.innerHTML = ''; let subtotal = 0;
+  document.querySelectorAll('#size-picker .size-chip').forEach(s => s.classList.remove('selected'));
+  const midSize = [...document.querySelectorAll('#size-picker .size-chip')].find(s => s.innerText === 'M');
+  if (midSize) midSize.classList.add('selected');
 
-            shoppingCart.forEach(item => {
-                let cost = item.price * item.qty; subtotal += cost;
-                wrapper.innerHTML += `
-                    <div class="bg-white p-3 rounded-xl border border-gray-100 flex items-center justify-between gap-3 text-left">
-                        <div class="flex items-center space-x-2 flex-grow overflow-hidden">
-                            <div class="bg-brandBg p-1.5 rounded-lg w-14 h-14 flex items-center justify-center flex-shrink-0"><img src="${item.image}" class="max-h-full object-contain mix-blend-multiply"></div>
-                            <div class="overflow-hidden space-y-0.5">
-                                <h3 class="font-bold text-xs text-gray-900 truncate">${item.title}</h3>
-                                <div class="flex items-center border border-gray-100 rounded-md bg-gray-50 w-20 h-6 mt-1">
-                                    <button onclick="changeCartItemQty('${item.productId}', -1)" class="px-1.5 bg-gray-100 font-bold text-xs">-</button>
-                                    <span class="flex-grow text-[11px] text-gray-800 font-bold text-center">${item.qty}</span>
-                                    <button onclick="changeCartItemQty('${item.productId}', 1)" class="px-1.5 bg-gray-100 font-bold text-xs">+</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-end space-y-2 flex-shrink-0">
-                            <span class="text-xs font-black text-brandDarkGreen">EGP${cost.toFixed(2)}</span>
-                            <button onclick="removeCartItem('${item.productId}')" class="text-gray-300 hover:text-red-500 text-[11px]"><i class="fas fa-trash-alt mr-1"></i>Remove</button>
-                        </div>
-                    </div>
-                `;
-            });
+  document.getElementById('det-title').innerText = currentProduct.name;
+  document.getElementById('det-price').innerText = `EGP ${currentProduct.price}`;
+  document.getElementById('color-name').innerText = currentVariant.name;
 
-            let discount = isCouponApplied ? (subtotal * 0.10) : 0;
-            document.getElementById('cart-subtotal-display').innerText = `EGP${subtotal.toFixed(2)}`;
-            if (isCouponApplied) {
-                document.getElementById('coupon-discount-row').classList.replace('hidden', 'flex');
-                document.getElementById('coupon-discount-display').innerText = `-EGP${discount.toFixed(2)}`;
-            } else document.getElementById('coupon-discount-row').classList.replace('flex', 'hidden');
-        }
+  const colPicker = document.getElementById('color-picker');
+  colPicker.innerHTML = currentProduct.variants.map((v, i) =>
+    `<div class="color-dot ${i == 0 ? 'selected' : ''}" style="background:${v.hex}" onclick="selectColor(${i}, this)"></div>`
+  ).join('');
 
-        function applyCouponCode() {
-            if (document.getElementById('coupon-code-input').value.trim().toUpperCase() === 'MALIKA10') {
-                isCouponApplied = true; renderCartPageContents(); alert("10% Discount Applied!");
-            } else alert("Invalid Coupon Code.");
-        }
+  updateSlider();
+  renderOtherProducts(id);
+  showView('details');
+  window.scrollTo(0, 0);
+}
 
-        // دالة تفتح صفحة الـ Checkout وتصفر اختيار المحافظة ليعيد العميل الاختيار
-        function openCheckoutPage() {
-            document.getElementById('checkout-form').reset();
-            navigateTo('checkout-page');
-            calculateLiveCheckoutInvoice(); 
-        }
+function changeDetailQty(delta) {
+  detailQty += delta;
+  if (detailQty < 1) detailQty = 1;
+  document.getElementById('detail-qty-value').innerText = detailQty;
+}
 
-        // دالة تقوم بحساب الفاتورة المباشرة والكاملة داخل صفحة الـ Checkout تلقائياً
-        function calculateLiveCheckoutInvoice() {
-            let subtotal = shoppingCart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-            let discount = isCouponApplied ? (subtotal * 0.10) : 0;
-            
-            const govSelect = document.getElementById('checkout-governorate');
-            const selectedGov = govSelect.value;
-            
-            let shippingFee = 0;
-            let grandTotal = subtotal - discount;
+function renderOtherProducts(currentId) {
+  const grid = document.getElementById('other-products-grid');
+  if (!grid) return;
+  const others = products.filter(p => p.id !== currentId && p.isOut !== true);
 
-            document.getElementById('chk-subtotal').innerText = `EGP${subtotal.toFixed(2)}`;
-            
-            if (isCouponApplied) {
-                document.getElementById('chk-discount-row').classList.remove('hidden');
-                document.getElementById('chk-discount').innerText = `-EGP${discount.toFixed(2)}`;
-            } else {
-                document.getElementById('chk-discount-row').classList.add('hidden');
-            }
+  if (others.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1; padding:20px;">No other products available right now.</div>`;
+    return;
+  }
 
-            if (selectedGov && SHIPPING_PRICES[selectedGov] !== undefined) {
-                shippingFee = SHIPPING_PRICES[selectedGov];
-                grandTotal += shippingFee;
-                document.getElementById('chk-shipping').innerText = `EGP${shippingFee.toFixed(2)}`;
-                document.getElementById('chk-shipping').className = "font-bold text-gray-800";
-            } else {
-                document.getElementById('chk-shipping').innerText = "Select governorate";
-                document.getElementById('chk-shipping').className = "font-medium text-red-400 italic";
-            }
+  grid.innerHTML = others.map(p => `
+    <div class="card cut" onclick="openDetails(${p.id})">
+      ${p.isBestSeller ? '<div class="best-badge"><i class="fas fa-bolt"></i>Best</div>' : ''}
+      <div class="img-box">${displayMedia(p.variants[0].images[0])}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-price">EGP ${p.price}</div>
+    </div>
+  `).join('');
+}
 
-            document.getElementById('chk-total').innerText = `EGP${grandTotal.toFixed(2)}`;
-        }
+function selectColor(index, el) {
+  currentVariant = currentProduct.variants[index];
+  document.getElementById('color-name').innerText = currentVariant.name;
+  el.parentElement.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  updateSlider();
+}
 
-        // معالجة تأكيد الطلب وإرساله تفصيلياً مع الفاتورة وحساب الشحن إلى واتساب
-        function handleFinalCheckoutOrder(e) {
-            e.preventDefault();
+function updateSlider() {
+  const track = document.getElementById('slider-track');
+  if (!track) return;
+  track.innerHTML = currentVariant.images.map(img => `<div class="slide">${displayMedia(img)}</div>`).join('');
+  track.style.transform = `translateX(0)`;
+  currentSlide = 0;
+}
 
-            const fullName = document.getElementById('checkout-name').value;
-            const phone = document.getElementById('checkout-phone').value;
-            const govSelect = document.getElementById('checkout-governorate');
-            const governorateName = govSelect.options[govSelect.selectedIndex].text;
-            const selectedGovKey = govSelect.value;
-            const address = document.getElementById('checkout-address').value;
+function changeSlide(dir) {
+  const max = currentVariant.images.length;
+  const track = document.getElementById('slider-track');
+  if (!track) return;
+  currentSlide = (currentSlide + dir + max) % max;
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
+}
 
-            if (!selectedGovKey) {
-                alert("Please select your governorate to complete order.");
-                return;
-            }
+function selectSize(el) {
+  document.querySelectorAll('.size-chip').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSize = el.innerText;
+}
 
-            let productsText = "";
-            shoppingCart.forEach((item, index) => {
-                productsText += `${index + 1}. ${item.title} (Qty: ${item.qty}) - $${(item.price * item.qty).toFixed(2)}\n`;
-            });
+// ---------- cart ----------
+function addToCart() {
+  const existing = cart.find(i => i.id === currentProduct.id && i.color === currentVariant.name && i.size === selectedSize);
+  if (existing) {
+    existing.qty += detailQty;
+  } else {
+    cart.push({
+      id: currentProduct.id,
+      name: currentProduct.name,
+      price: currentProduct.price,
+      color: currentVariant.name,
+      size: selectedSize,
+      img: currentVariant.images[0],
+      qty: detailQty
+    });
+  }
+  updateCartBadge();
+  alert("Added to cart successfully! ✅");
+}
 
-            let subtotal = shoppingCart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-            let discount = isCouponApplied ? (subtotal * 0.10) : 0;
-            let shippingFee = SHIPPING_PRICES[selectedGovKey];
-            let grandTotal = subtotal - discount + shippingFee;
+function renderCartUI() {
+  const list = document.getElementById('cart-list');
+  const footer = document.getElementById('cart-footer');
+  if (!list) return;
 
-            // نص رسالة الواتساب الاحترافية المنسقة بالفاتورة الجديدة
-            let message = `*New Order From Malika Store* ✨\n\n`;
-            message += `👤 *Customer Name:* ${fullName}\n`;
-            message += `📞 *Phone Number:* ${phone}\n`;
-            message += `📍 *Governorate:* ${governorateName}\n`;
-            message += `🏠 *Address:* ${address}\n\n`;
-            message += `📦 *Products Ordered:*\n${productsText}\n`;
-            message += `--- *INVOICE DETAILS* ---\n`;
-            message += `🔹 *Subtotal:* EGP${subtotal.toFixed(2)}\n`;
-            if (isCouponApplied) message += `🎁 *Discount (10%):* -$${discount.toFixed(2)}\n`;
-            message += `🚚 *Shipping Fees:* EGP${shippingFee.toFixed(2)}\n`;
-            message += `💰 *Grand Total:* EGP${grandTotal.toFixed(2)} (Cash on Delivery)`;
+  if (cart.length === 0) {
+    list.innerHTML = `<div class="empty-state"><span class="glyph">🛒</span>Your cart is empty.</div>`;
+    if (footer) footer.style.display = "none";
+    return;
+  }
 
-            // ضع رقم الواتساب الخاص بك بالصيغة الدولية هنا
-            const myWhatsAppNumber = "201111474333"; 
+  footer.style.display = "block";
+  let subTotal = 0;
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+  const minPrice = Math.min(...cart.map(item => item.price));
+  let discountApplied = false;
 
-            const whatsappUrl = `https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+  list.innerHTML = cart.map((item, idx) => {
+    subTotal += item.price * item.qty;
+    let showDiscountLabel = "";
+    if (totalQty >= 3 && item.price === minPrice && !discountApplied) {
+      showDiscountLabel = `<span style="color:var(--gold); font-size:11px;">· 50% off</span>`;
+      discountApplied = true;
+    }
+    return `
+    <div class="list-item">
+      <div class="list-img">${displayMedia(item.img)}</div>
+      <div style="flex:1">
+        <b>${item.name}</b> ${showDiscountLabel}<br>
+        <small style="color:var(--steel);">${item.color} | ${item.size}</small><br>
+        <small style="color:var(--steel);">Qty: ${item.qty}</small>
+      </div>
+      <div style="font-family:'Space Grotesk'; color:var(--gold); font-weight:600;">EGP ${item.price * item.qty}</div>
+      <button onclick="removeFromCart(${idx})" style="border:none; background:none; color:var(--rust); font-size:20px; cursor:pointer;">×</button>
+    </div>`;
+  }).join('');
 
-            alert("Redirecting to WhatsApp to submit your full invoice...");
-            shoppingCart = [];
-            isCouponApplied = false;
-            updateGlobalBadgesAndUI();
-            navigateTo('home-page');
-        }
+  let finalDiscount = 0;
+  let discountName = "";
+  const shippingFee = totalQty >= 3 ? 0 : 40;
 
-        function toggleFavoriteProduct(id, e) {
-            if (e) e.stopPropagation();
-            if (favoriteProducts.includes(id)) favoriteProducts = favoriteProducts.filter(i => i !== id);
-            else favoriteProducts.push(id);
-            updateGlobalBadgesAndUI(); renderHomepageBestsellers(); renderStoreProducts(); renderFavoritesPageContents();
-        }
+  if (totalQty >= 3) {
+    finalDiscount = minPrice * 0.5;
+    discountName = "Bulk Discount (50% off cheapest)";
+  } else {
+    finalDiscount = subTotal * 0.10;
+    discountName = "Promo Discount (10%)";
+  }
 
-        function toggleFavoriteCurrentProduct() { if (currentViewingProduct) toggleFavoriteProduct(currentViewingProduct.id, null); }
+  const finalTotal = (subTotal - finalDiscount) + shippingFee;
+  const totalEl = document.getElementById('total-price');
 
-        function renderFavoritesPageContents() {
-            const grid = document.getElementById('favorites-items-grid');
-            const empty = document.getElementById('empty-favorites-view');
-            if (favoriteProducts.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
-            empty.classList.add('hidden'); grid.innerHTML = '';
-            favoriteProducts.forEach(id => {
-                const p = PRODUCTS_DATABASE.find(item => item.id === id);
-                if (p) grid.innerHTML += createProductCardHtml(p);
-            });
-        }
+  if (totalEl) {
+    totalEl.innerHTML = `
+      <div style="font-size:13px; color:var(--steel); line-height:1.8;">
+        Subtotal: EGP ${subTotal}
+        <br><span style="color:var(--gold);">${discountName}: -EGP ${finalDiscount.toFixed(2)}</span>
+        <br>Delivery: ${shippingFee === 0 ? '<span style="color:var(--gold);">FREE</span>' : shippingFee + ' EGP'}
+      </div>
+      <hr style="border-color:var(--line); margin:12px 0;">
+      <div style="font-family:'Space Grotesk'; font-size:20px; font-weight:600; color:var(--mist);">Total: EGP ${finalTotal.toFixed(2)}</div>
+    `;
+  }
+}
 
-        function executeSearchQuery() {
-            const q = document.getElementById('main-search-input').value.toLowerCase().trim();
-            const grid = document.getElementById('search-results-grid');
-            const p = document.getElementById('search-placeholder-view');
-            if (!q) { grid.innerHTML = ''; p.classList.remove('hidden'); return; }
-            const matched = PRODUCTS_DATABASE.filter(item => item.title.toLowerCase().includes(q));
-            p.classList.add('hidden'); grid.innerHTML = '';
-            if (matched.length === 0) { p.classList.remove('hidden'); p.innerText = "No results found."; return; }
-            matched.forEach(item => { grid.innerHTML += createProductCardHtml(item); });
-        }
+function removeFromCart(idx) {
+  cart.splice(idx, 1);
+  renderCartUI();
+  updateCartBadge();
+}
 
-        function updateGlobalBadgesAndUI() {
-            let total = shoppingCart.reduce((sum, i) => sum + i.qty, 0);
-            document.getElementById('cart-badge').innerText = total;
-            if (total > 0) document.getElementById('nav-cart-dot').classList.remove('hidden');
-            else document.getElementById('nav-cart-dot').classList.add('hidden');
-            const fav = document.getElementById('fav-badge');
-            if (favoriteProducts.length > 0) { fav.classList.remove('hidden'); fav.innerText = favoriteProducts.length; }
-            else fav.classList.add('hidden');
-        }
+// ---------- checkout ----------
+function openCheckout() {
+  isQuickOrder = document.getElementById('details').classList.contains('active');
 
-        function handleContactSubmit(e) { e.preventDefault(); alert("Your consultation message has been sent successfully!"); document.getElementById('contact-form').reset(); }
+  if (cart.length === 0 && !currentProduct) {
+    alert("Please select a product first! 🦅");
+    return;
+  }
+  alert("📍 Delivery is available in Alexandria only.");
+  showView('checkout');
+}
 
-        function showToast(m) {
-            const t = document.createElement('div');
-            t.className = "fixed bottom-24 left-1/2 -translate-x-1/2 bg-brandDarkGreen text-white text-[11px] font-bold px-4 py-2.5 rounded-full shadow-lg z-50 text-center";
-            t.innerText = m; document.body.appendChild(t);
-            setTimeout(() => { t.remove(); }, 2000);
-        }
-    </script>
+function sendOrderToWhatsApp() {
+  const name = document.getElementById('cust-name').value;
+  const phone = document.getElementById('cust-phone').value;
+  const address = document.getElementById('cust-address').value;
+
+  if (!name || !phone || !address) { alert("Please fill all fields! ✍️"); return; }
+
+  const orderItems = isQuickOrder ? [{ ...currentProduct, color: currentVariant.name, size: selectedSize, qty: detailQty }] : cart;
+  const totalQty = orderItems.reduce((sum, item) => sum + item.qty, 0);
+  const minPrice = Math.min(...orderItems.map(item => item.price));
+  let discountApplied = false;
+  let subTotal = 0;
+  let totalDiscount = 0;
+  let itemsSection = "";
+
+  orderItems.forEach((item) => {
+    const itemTotal = item.price * item.qty;
+    subTotal += itemTotal;
+
+    itemsSection += "T-shirt: " + item.name + "\r\n";
+    itemsSection += "Color: " + item.color + "\r\n";
+    itemsSection += "Size: " + item.size + "\r\n";
+    itemsSection += "Quantity: " + item.qty + "\r\n";
+
+    if (totalQty >= 3 && item.price === minPrice && !discountApplied) {
+      totalDiscount = item.price * 0.5;
+      discountApplied = true;
+      itemsSection += "Offer: 50% OFF on this item! ✅\r\n";
+    }
+    itemsSection += "----------------\r\n";
+  });
+
+  if (totalQty < 3) {
+    totalDiscount = subTotal * 0.10;
+  }
+
+  const deliveryFee = totalQty >= 3 ? 0 : 40;
+  const finalTotal = (subTotal - totalDiscount) + deliveryFee;
+
+  let message = "📍 New Order (Alexandria Service Only)\r\n";
+  message += "Name: " + name + "\r\n";
+  message += "Address: " + address + " (Alexandria)\r\n";
+  message += "Mobile: " + phone + "\r\n";
+  message += "-------------------\r\n";
+  message += itemsSection;
+  message += "Subtotal: " + subTotal + " EGP\r\n";
+
+  if (totalQty >= 3) {
+    message += "Bulk Discount (50% on cheapest): -" + totalDiscount + " EGP\r\n";
+  } else {
+    message += "Promo Discount (10%): -" + totalDiscount.toFixed(2) + " EGP\r\n";
+  }
+
+  message += "Delivery: " + (deliveryFee === 0 ? "FREE" : deliveryFee + " EGP") + "\r\n";
+  message += "-------------------\r\n";
+  message += "Grand Total: " + finalTotal.toFixed(2) + " EGP";
+
+  const finalUrl = "https://wa.me/201118022353?text=" + encodeURIComponent(message);
+  window.open(finalUrl, "_blank");
+}
+
+// ---------- share ----------
+function openShareMenu() {
+  document.getElementById('share-overlay').style.display = 'block';
+  document.getElementById('share-menu').style.display = 'block';
+}
+function closeShare() {
+  document.getElementById('share-overlay').style.display = 'none';
+  document.getElementById('share-menu').style.display = 'none';
+}
+function shareToWhatsApp() {
+  const shareUrl = window.location.origin + window.location.pathname + `?product=${currentProduct.id}`;
+  const text = `Check this out on Hawk Store: ${currentProduct.name} - ${shareUrl}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+}
+function copyProductLink() {
+  const shareUrl = window.location.origin + window.location.pathname + `?product=${currentProduct.id}`;
+  navigator.clipboard.writeText(shareUrl).then(() => alert("Product Link Copied!"));
+}
+
+// ---------- init ----------
+function init() {
+  renderHome();
+  renderBestSellers();
+  updateCartBadge();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('product');
+  if (productId) openDetails(parseInt(productId));
+}
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
